@@ -42,6 +42,7 @@ Feel free to contribute to this project or use it as a base for your own NFT gal
     - Every subsequent wallet will be loaded in about 3 seconds after each other due to API limitations.
 - Customizable based on your wallet address and NFTs
 - Using the Archemy API
+- Customizable Filter against scam or unwanted NFTs
 
 ## Technologies Used
 
@@ -51,11 +52,11 @@ Feel free to contribute to this project or use it as a base for your own NFT gal
 - Alchemy API
 
 ## Contact
-
+Feel free ho contact me on my socials if you face any problem or need help with tbe setup process!
 
 - [Twitter: @MrMidnight53](https://twitter.com/MrMidnight53)
-- [YouTube: mrmidnight7331](https://youtube.com/mrmidnight7331)
-- [OpenSea: MrMidnight7331](https://opensea.io/collection/mrmidnight7331)
+- [Instagram: mrmidnight7331](https://www.instagram.com/mrmidnight7331)
+- [LinkTree](https://linktr.ee/MrMidnight53)
 
 ## Donate
 If you think I did a good job feel free to donate here to help me create OpenSource Projects (Money doesn't grow on OpenSource):
