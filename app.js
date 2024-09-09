@@ -79,11 +79,6 @@ const displayNFTs = async () => {
             continue;
         }
 
-        // Add title for Ethereum NFTs
-        if (filteredEthNFTs.length > 0) {
-            gallery.innerHTML += '<h2>Ethereum NFTs</h2>';
-        }
-
         // Display each Ethereum NFT
         filteredEthNFTs.forEach(nft => {
             const metadata = nft.metadata || {};
@@ -111,10 +106,7 @@ const displayNFTs = async () => {
             gallery.appendChild(nftElement);
         });
 
-        // Add title for Polygon NFTs
-        if (filteredPolygonNFTs.length > 0) {
-            gallery.innerHTML += '<h2>Polygon NFTs</h2>';
-        }
+    
 
         // Display each Polygon NFT
         filteredPolygonNFTs.forEach(nft => {
