@@ -1,7 +1,4 @@
-// Replace with your Alchemy API Key
-const apiKey = ${{ secrets.APIKEY }};
-
-// Fetch configuration from config.json
+// Function to fetch configuration from config.json
 const fetchConfig = async () => {
     try {
         const response = await fetch('configs/config.json');
@@ -10,10 +7,9 @@ const fetchConfig = async () => {
         return config;
     } catch (error) {
         console.error('Error loading configuration:', error);
-        return { username: 'DefaultUser', walletAddresses: [] };
+        return { username: 'DefaultUser', walletAddresses: [], apiKey: '' };
     }
 };
-
 
 // Convert IPFS URL to HTTP URL
 const convertIPFSUrl = (ipfsUrl) => {
@@ -24,7 +20,7 @@ const convertIPFSUrl = (ipfsUrl) => {
 };
 
 // Fetch NFTs from Alchemy API for a given chain with retry logic
-const fetchNFTs = async (chain, walletAddress, retries = 3) => {
+const fetchNFTs = async (chain, walletAddress, apiKey, retries = 3) => {
     const apiUrl = chain === 'ethereum'
         ? `https://eth-mainnet.g.alchemy.com/v2/${apiKey}/getNFTsForOwner?owner=${walletAddress}&withMetadata=true`
         : `https://polygon-mainnet.g.alchemy.com/v2/${apiKey}/getNFTsForOwner?owner=${walletAddress}&withMetadata=true`;
@@ -38,7 +34,7 @@ const fetchNFTs = async (chain, walletAddress, retries = 3) => {
             if (retries > 0) {
                 console.warn(`Rate limit exceeded. Retrying ${retries} more times...`);
                 await new Promise(resolve => setTimeout(resolve, 5000)); // 5 seconds delay
-                return fetchNFTs(chain, walletAddress, retries - 1);
+                return fetchNFTs(chain, walletAddress, apiKey, retries - 1);
             } else {
                 throw new Error('Rate limit exceeded. No retries left.');
             }
@@ -58,7 +54,6 @@ const fetchNFTs = async (chain, walletAddress, retries = 3) => {
         return [];
     }
 };
-
 
 // Load and parse filter.json
 const loadFilters = async () => {
@@ -92,8 +87,8 @@ const getExplorerUrl = (chain, address) => {
 };
 
 // Function to display NFTs
-const displayNFTsForChainAndWallet = async (chain, walletAddress, gallery) => {
-    const nfts = await fetchNFTs(chain, walletAddress);
+const displayNFTsForChainAndWallet = async (chain, walletAddress, apiKey, gallery) => {
+    const nfts = await fetchNFTs(chain, walletAddress, apiKey);
     const filters = await loadFilters();
     const shortenedAddress = shortenAddress(walletAddress);
 
@@ -139,6 +134,7 @@ const displayNFTs = async () => {
     const config = await fetchConfig();
     const walletAddresses = config.walletAddresses;
     const username = config.username;
+    const apiKey = config.apiKey;
 
     // Update the page with the username
     document.getElementById('header-title').textContent = `${username}'s NFT Gallery`;
@@ -147,10 +143,10 @@ const displayNFTs = async () => {
     // Loop through each wallet address and blockchain
     for (const walletAddress of walletAddresses) {
         // Display Ethereum NFTs
-        await displayNFTsForChainAndWallet('ethereum', walletAddress, gallery);
+        await displayNFTsForChainAndWallet('ethereum', walletAddress, apiKey, gallery);
 
         // Display Polygon NFTs
-        await displayNFTsForChainAndWallet('polygon', walletAddress, gallery);
+        await displayNFTsForChainAndWallet('polygon', walletAddress, apiKey, gallery);
     }
 };
 
