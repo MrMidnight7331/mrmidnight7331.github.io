@@ -1,5 +1,5 @@
 // Replace with your Alchemy API Key
-const apiKey = "V02Btj6wPHcO9W5SYKk5cocTEli93zbV";
+const apiKey = ${{ secrets.MY_API_KEY }};
 
 // Fetch configuration from config.json
 const fetchConfig = async () => {
