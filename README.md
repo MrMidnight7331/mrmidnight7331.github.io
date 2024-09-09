@@ -57,10 +57,6 @@ Feel free to contribute to this project or use it as a base for your own NFT gal
 - [YouTube: mrmidnight7331](https://youtube.com/mrmidnight7331)
 - [OpenSea: MrMidnight7331](https://opensea.io/collection/mrmidnight7331)
 
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
-
 ## Donate
 If you think I did a good job feel free to donate here to help me create OpenSource Projects (Money doesn't grow on OpenSource):
 
@@ -75,3 +71,8 @@ BTC: bc1q55kfd0elssc9u3ha86gw4ea9w3l5cw7ch58hce
 Or buy me a coffee here:
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/S6S7NRQSG)
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
+
