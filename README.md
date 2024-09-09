@@ -10,5 +10,6 @@ To do list:
 - make username and socials in a config file
 - tilting card that follows the mouse pointer
 - light and dark mode intigration - cookie
-- better config file for api key and wallet address (more hidden)
+- better config file for wallet address
 - make another github repo to host a public version of the webapp
+- api in git secret
