@@ -1,0 +1,185 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #1e1e2e; /* Base */
+    color: #cdd6f4; /* Text */
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+header {
+    background-color: #313244; /* Surface0 */
+    color: #cdd6f4; /* Text */
+    text-align: center;
+    padding: 1em 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    border-bottom: 2px solid #cba6f7; /* Mauve for a subtle accent */
+}
+
+main {
+    padding: 2em;
+}
+
+.gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3em; /* Increased gap for larger cards */
+    justify-content: center;
+}
+
+.nft-item {
+    background-color: #45475a; /* Surface1 */
+    border-radius: 16px;
+    overflow: hidden; /* Ensure no overflow */
+    width: 400px; /* Increased width */
+    height: 500px; /* Increased height */
+    max-width: 100%; /* Ensure it doesn't overflow the screen */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    perspective: 1000px; /* For 3D effect */
+    position: relative; /* For the description positioning */
+}
+
+.top-bar {
+    position: absolute;
+    top: 0; /* At the top of the card */
+    left: 0;
+    width: 100%;
+    background: rgba(203, 166, 247, 0.7); /* Mauve with transparency */
+    color: #1e1e2e; /* Darker text color */
+    padding: 0.5em 1em;
+    box-sizing: border-box;
+    text-align: center;
+    z-index: 2; /* Ensure it is above other content */
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    opacity: 0; /* Hidden by default */
+    transform: translateY(-100%); /* Slide the top bar out of view by default */
+    backdrop-filter: blur(8px); /* Blurry effect */
+    border-radius: 16px 16px 0 0; /* Rounded edges */
+    overflow: hidden; /* Ensure no overflow during transition */
+}
+
+.metadata-title {
+    font-size: 1.3em; /* Increased font size for title */
+    font-weight: bold;
+    margin: 0;
+    color: #1e1e2e; /* Dark text color for title */
+}
+
+.metadata-blockchain {
+    font-size: 0.9em; /* Slightly smaller font size for blockchain */
+    margin: 0.5em 0;
+    color: #1e1e2e; /* Matching the title color */
+}
+
+.image-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.nft-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures the image covers the entire area without distortion */
+    transition: transform 0.3s ease;
+}
+
+.description-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(203, 166, 247, 0.9); /* Mauve with opacity */
+    color: #1e1e2e; /* Dark text color */
+    padding: 1em;
+    box-sizing: border-box;
+    transform: translateY(100%);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    text-align: center; /* Center the text */
+    border-radius: 0 0 16px 16px; /* Rounded edges at the bottom */
+    overflow: hidden; /* Ensure no overflow */
+}
+
+.description-text {
+    max-height: none; /* Ensure it shows full text */
+    overflow: visible; /* Allow full text to be visible */
+    text-overflow: clip; /* Ensure no ellipsis */
+    margin: 0; /* Remove default margin */
+}
+
+.description-text a {
+    color: #74c7ec; /* Sapphire */
+    text-decoration: underline; /* Underline links */
+}
+
+.description-text a:hover {
+    color: #a6e3a1; /* Green */
+}
+
+.nft-item:hover {
+    transform: scale(1.05) rotateX(0deg) rotateY(0deg);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+    filter: brightness(1.1); /* Slightly brighten the card on hover */
+}
+
+.nft-item:hover .nft-image {
+    transform: scale(1.1); /* Slight zoom effect */
+}
+
+.nft-item:hover .description-container {
+    transform: translateY(0); /* Slide up the description */
+    opacity: 1; /* Ensure description is visible */
+}
+
+.nft-item:hover .top-bar {
+    opacity: 1; /* Show the top bar */
+    transform: translateY(0); /* Slide the top bar into view */
+}
+
+/* Footer styling */
+footer {
+    background-color: rgba(49, 50, 68, 0.9); /* Surface0 with slight transparency */
+    color: #cdd6f4; /* Text */
+    padding: 0.5em 2em; /* Reduced padding */
+    box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.2);
+    transition: transform 0.5s ease-in-out;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.footer-content {
+    text-align: center;
+}
+
+.social-media {
+    margin-bottom: 0.5rem; /* Reduced margin */
+}
+
+.social-media a {
+    margin: 0 0.5rem;
+    display: inline-block;
+}
+
+.social-media img {
+    width: 24px;
+    height: 24px;
+    vertical-align: middle; /* Aligns the icons properly */
+}
+
+.copyright {
+    color: #cdd6f4;
+    margin: 0;
+}
+
+/* Footer visibility animation */
+footer.hidden {
+    transform: translateY(100%);
+}
+
