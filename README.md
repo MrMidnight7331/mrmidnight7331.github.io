@@ -8,16 +8,23 @@ Welcome to my NFT gallery website! This was designed to showcase a NFT collectio
 
 ## Why I Made It
 
-I created this website initially to showcase my own NFT collection so I could put the website on LinkTree. However after googeling i wasn't abel to find a valid provider that will do this job. Every Website I found was inputting a address and it will display the images. However I wanted a more static yet dynamic solution. This is the solution
+I created this website initially to showcase my own NFT collection so I could put the website on LinkTree. However after googeling I wasn't able to find a valid provider that will do this job. Every Website I found was inputting a address and it will display the images. However I wanted a more static yet dynamic solution. This is the solution
 
-## Fork This Site
+## Your Own Version
 
-If you’re interested in customizing or using this site for your own purposes, you can fork it from the original repository. Here’s how:
+If you’re interested in customizing or using this site for your own purposes, you can copy the code from this repository. Here’s how:
 
-1. Visit the [GitHub repository](https://github.com/mrmidnight7331/mrmidnight7331.github.io).
-2. Click the "Fork" button in the top-right corner of the page.
-3. Clone your forked repository to your local machine using `git clone <your-fork-url>`.
-4. Make your changes and push them to your forked repository.
+- Download the repository: `git clone https://github.com/MrMidnight7331/mrmidnight7331.github.io.git`
+- Customize the config.json file.
+
+    - Change the wallet address to your own ethereum addresses. It works with multiple addresses!
+    - Change your username
+
+- Customize your profile picture:
+    - Put your own pfp.ico into "icons"
+
+- Create a github pages website: [Tutorial](https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site)
+- Enjoy!
 
 Feel free to contribute to this project or use it as a base for your own NFT gallery!
 
@@ -26,6 +33,9 @@ Feel free to contribute to this project or use it as a base for your own NFT gal
 - Interactive NFT gallery
 - Smooth hover effects and animations
 - Integration with Ethereum and Polygon blockchains
+- Supports multiple wallets:
+    - First wallet address is the "main" wallet and will be loaded on reload
+    - Every subsequent wallet will be loaded in about 3 seconds after each other due to API limitations.
 - Customizable based on your wallet address and NFTs
 - Using the Archemy API
 
