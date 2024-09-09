@@ -128,15 +128,18 @@ footer {
     background-color: rgba(49, 50, 68, 0.9); /* Surface0 with slight transparency */
     color: #cdd6f4; /* Text */
     padding: 0.5em 2em; /* Reduced padding */
-    box-shadow: 0 -4px 6px rgba(203, 166, 247, 1);
-    transition: transform 0.5s ease-in-out;
+    box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.2); /* Slight shadow */
+    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out; /* Smooth transition */
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
     z-index: 1000;
     transform: translateY(100%); /* Initially hidden */
+    opacity: 0; /* Hidden at first */
 }
+
+
 
 .footer-content {
     text-align: center;

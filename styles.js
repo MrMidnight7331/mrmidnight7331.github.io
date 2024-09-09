@@ -19,6 +19,7 @@ const addZoomEffect = () => {
 };
 
 // Function to handle footer visibility
+// Function to handle footer visibility
 const handleFooterVisibility = () => {
     const footer = document.querySelector('footer');
 
@@ -27,15 +28,15 @@ const handleFooterVisibility = () => {
         const documentHeight = document.documentElement.offsetHeight;
 
         if (scrollPosition >= documentHeight) {
-            footer.style.opacity = '1';
-            footer.style.transform = 'translateY(0)';
+            footer.style.opacity = '1'; // Make footer visible
+            footer.style.transform = 'translateY(0)'; // Slide up the footer
         } else {
-            footer.style.opacity = '0';
-            footer.style.transform = 'translateY(100%)';
+            footer.style.opacity = '0'; // Hide footer smoothly
+            footer.style.transform = 'translateY(100%)'; // Slide down the footer smoothly
         }
     };
 
-    // Initial check
+    // Initial check to hide the footer before scrolling
     checkScrollPosition();
 
     // Attach scroll event listener
@@ -44,7 +45,7 @@ const handleFooterVisibility = () => {
 
 // Run functions after the window has loaded
 window.onload = () => {
-    displayNFTs(); // Ensure this function is defined in your app.js
-    addZoomEffect(); // Add zoom effect
-    handleFooterVisibility(); // Handle footer visibility
+    displayNFTs(); // Ensure this function is defined in your app.js to display NFTs
+    addZoomEffect(); // Apply zoom and blur effects to NFT items
+    handleFooterVisibility(); // Manage footer visibility based on scroll position
 };
