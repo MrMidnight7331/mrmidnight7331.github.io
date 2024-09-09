@@ -3,7 +3,8 @@ const apiKey = "V02Btj6wPHcO9W5SYKk5cocTEli93zbV";
 
 // Define your wallet addresses here
 const walletAddresses = [
-    '0x4bBB452a380A73E8c969055A23d71AB4487c32AD' // Replace with your wallet address
+    '0x4bBB452a380A73E8c969055A23d71AB4487c32AD',
+    '0x939A9353e1a72e5d6Da07424c74815a6651a86f4' // Replace with your wallet address
 ];
 
 // Convert IPFS URL to HTTP URL
@@ -14,14 +15,27 @@ const convertIPFSUrl = (ipfsUrl) => {
     return ipfsUrl;
 };
 
-// Fetch NFTs from Alchemy API for a given chain
-const fetchNFTs = async (chain, walletAddress) => {
+// Fetch NFTs from Alchemy API for a given chain with retry logic
+const fetchNFTs = async (chain, walletAddress, retries = 3) => {
+    const apiUrl = chain === 'ethereum'
+        ? `https://eth-mainnet.g.alchemy.com/v2/${apiKey}/getNFTsForOwner?owner=${walletAddress}&withMetadata=true`
+        : `https://polygon-mainnet.g.alchemy.com/v2/${apiKey}/getNFTsForOwner?owner=${walletAddress}&withMetadata=true`;
+    
     try {
-        const apiUrl = chain === 'ethereum'
-            ? `https://eth-mainnet.g.alchemy.com/v2/${apiKey}/getNFTsForOwner?owner=${walletAddress}&withMetadata=true`
-            : `https://polygon-mainnet.g.alchemy.com/v2/${apiKey}/getNFTsForOwner?owner=${walletAddress}&withMetadata=true`;
-        
         const response = await fetch(apiUrl);
+
+        // Check if response status is 429 (Rate Limit Exceeded)
+        if (response.status === 429) {
+            if (retries > 0) {
+                console.warn(`Rate limit exceeded. Retrying ${retries} more times...`);
+                // Wait for a bit before retrying
+                await new Promise(resolve => setTimeout(resolve, 5000)); // 5 seconds delay
+                return fetchNFTs(chain, walletAddress, retries - 1);
+            } else {
+                throw new Error('Rate limit exceeded. No retries left.');
+            }
+        }
+
         const data = await response.json();
         
         // Check for data or errors
@@ -56,88 +70,57 @@ const isFiltered = (title, description, filters) => {
     return filters.some(word => text.includes(word.toLowerCase()));
 };
 
+// Function to display NFTs
+const displayNFTsForChainAndWallet = async (chain, walletAddress, gallery) => {
+    const nfts = await fetchNFTs(chain, walletAddress);
+    const filters = await loadFilters();
+
+    // Filter out spam NFTs
+    const filteredNFTs = nfts.filter(nft => !isFiltered(nft.metadata?.name || '', nft.metadata?.description || '', filters));
+
+
+
+    // Display each NFT
+    filteredNFTs.forEach(nft => {
+        const metadata = nft.metadata || {};
+        const imageUrl = convertIPFSUrl(metadata.image || '');
+        const name = metadata.name || 'Unknown';
+        const description = metadata.description || 'No description';
+
+        const nftElement = document.createElement('div');
+        nftElement.className = 'nft-item';
+
+        nftElement.innerHTML = `
+            <div class="top-bar">
+                <p class="metadata-title">${name}</p>
+                <p class="metadata-blockchain">${chain.charAt(0).toUpperCase() + chain.slice(1)}</p>
+            </div>
+            <div class="image-container">
+                <img src="${imageUrl}" alt="${name}" class="nft-image">
+            </div>
+            <div class="description-container">
+                <p class="description-text">${description}</p>
+            </div>
+        `;
+
+        gallery.appendChild(nftElement);
+    });
+};
+
 // Function to fetch and display NFTs from all wallet addresses and chains
 const displayNFTs = async () => {
     const gallery = document.getElementById('nft-gallery');
     gallery.innerHTML = ''; // Clear previous content
 
-    const filters = await loadFilters();
-
-    // Loop through each wallet address
+    // Loop through each wallet address and blockchain
     for (const walletAddress of walletAddresses) {
-        // Fetch NFTs from Ethereum
-        const ethNFTs = await fetchNFTs('ethereum', walletAddress);
-        // Fetch NFTs from Polygon
-        const polygonNFTs = await fetchNFTs('polygon', walletAddress);
+        // Display Ethereum NFTs
+        await displayNFTsForChainAndWallet('ethereum', walletAddress, gallery);
 
-        // Filter out spam NFTs
-        const filteredEthNFTs = ethNFTs.filter(nft => !isFiltered(nft.metadata?.name || '', nft.metadata?.description || '', filters));
-        const filteredPolygonNFTs = polygonNFTs.filter(nft => !isFiltered(nft.metadata?.name || '', nft.metadata?.description || '', filters));
-
-        if (filteredEthNFTs.length === 0 && filteredPolygonNFTs.length === 0) {
-            gallery.innerHTML += '<p>No NFTs found.</p>';
-            continue;
-        }
-
-        // Display each Ethereum NFT
-        filteredEthNFTs.forEach(nft => {
-            const metadata = nft.metadata || {};
-            const imageUrl = convertIPFSUrl(metadata.image || '');
-            const name = metadata.name || 'Unknown';
-            const blockchain = 'Ethereum';
-            const description = metadata.description || 'No description';
-
-            const nftElement = document.createElement('div');
-            nftElement.className = 'nft-item';
-
-            nftElement.innerHTML = `
-                <div class="top-bar">
-                    <p class="metadata-title">${name}</p>
-                    <p class="metadata-blockchain">${blockchain}</p>
-                </div>
-                <div class="image-container">
-                    <img src="${imageUrl}" alt="${name}" class="nft-image">
-                </div>
-                <div class="description-container">
-                    <p class="description-text">${description}</p>
-                </div>
-            `;
-
-            gallery.appendChild(nftElement);
-        });
-
-    
-
-        // Display each Polygon NFT
-        filteredPolygonNFTs.forEach(nft => {
-            const metadata = nft.metadata || {};
-            const imageUrl = convertIPFSUrl(metadata.image || '');
-            const name = metadata.name || 'Unknown';
-            const blockchain = 'Polygon';
-            const description = metadata.description || 'No description';
-
-            const nftElement = document.createElement('div');
-            nftElement.className = 'nft-item';
-
-            nftElement.innerHTML = `
-                <div class="top-bar">
-                    <p class="metadata-title">${name}</p>
-                    <p class="metadata-blockchain">${blockchain}</p>
-                </div>
-                <div class="image-container">
-                    <img src="${imageUrl}" alt="${name}" class="nft-image">
-                </div>
-                <div class="description-container">
-                    <p class="description-text">${description}</p>
-                </div>
-            `;
-
-            gallery.appendChild(nftElement);
-        });
+        // Display Polygon NFTs
+        await displayNFTsForChainAndWallet('polygon', walletAddress, gallery);
     }
 };
 
 // Load the NFTs when the page loads
 window.onload = displayNFTs;
-
-
