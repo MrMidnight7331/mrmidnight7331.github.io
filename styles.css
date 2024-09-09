@@ -5,6 +5,7 @@ body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    transition: filter 0.3s ease;
 }
 
 header {
@@ -12,14 +13,14 @@ header {
     color: #cdd6f4; /* Text */
     text-align: center;
     padding: 1em 0;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 6px rgba(203, 166, 247, 2);
     border-bottom: 2px solid #cba6f7; /* Mauve for a subtle accent */
 }
 
 main {
     padding: 2em;
+    padding-bottom: 140px; /* Adjust this value based on the footer height */
 }
-
 
 .gallery {
     display: flex;
@@ -35,59 +36,63 @@ main {
     width: 400px; /* Increased width */
     height: 500px; /* Increased height */
     max-width: 100%; /* Ensure it doesn't overflow the screen */
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-    transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
+    box-shadow: 0 8px 16px rgba(255, 255, 255, 0.4);
     display: flex;
     flex-direction: column;
     align-items: center;
     perspective: 1000px; /* For 3D effect */
-    position: relative; /* For the description positioning */
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
+}
+
+.top-bar,
+.description-container {
+    position: absolute;
+    width: 100%;
+    color: #1e1e2e; /* Darker text color */
+    background: rgba(255, 255, 255, 0.5); /* Mauve with transparency */
+    text-align: center;
+    padding: 0.5em 1em;
+    box-sizing: border-box;
+    z-index: 2; /* Ensure it is above other content */
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    overflow: hidden; /* Ensure no overflow during transition */
 }
 
 .top-bar {
-    position: absolute;
     top: 0; /* At the top of the card */
-    left: 0;
-    width: 100%;
-    background: rgba(203, 166, 247, 0.7); /* Mauve with transparency */
-    color: #1e1e2e; /* Darker text color */
-    padding: 0.5em 1em;
-    box-sizing: border-box;
-    text-align: center;
-    z-index: 2; /* Ensure it is above other content */
-    transition: opacity 0.3s ease, transform 0.3s ease;
+    border-radius: 16px 16px 0 0; /* Rounded edges */
     opacity: 0; /* Hidden by default */
     transform: translateY(-100%); /* Slide the top bar out of view by default */
-    backdrop-filter: blur(8px); /* Blurry effect */
-    border-radius: 16px 16px 0 0; /* Rounded edges */
-    overflow: hidden; /* Ensure no overflow during transition */
+}
+
+.description-container {
+    bottom: 0; /* Position at the bottom of the card */
+    padding: 1em; /* Consistent padding */
+    transform: translateY(100%);
+    border-radius: 0 0 16px 16px; /* Rounded edges at the bottom */
 }
 
 .metadata-title {
     font-size: 1.3em; /* Increased font size for title */
     font-weight: bold;
     margin: 0;
-    color: #1e1e2e; /* Dark text color for title */
+    padding: 0.5em;
+    color: #1e1e2e; /* Dark text color */
+    background-color: rgba(69, 71, 90, 0.7); /* Slightly transparent background matching NFT background */
+    border-radius: 8px; /* Rounded corners */
 }
 
-.metadata-blockchain {
-    font-size: 0.9em; /* Slightly smaller font size for blockchain */
-    margin: 0.5em 0;
-    color: #1e1e2e; /* Match the title color */
-}
-
-/* Style for links inside metadata-blockchain */
-.metadata-blockchain a {
-    color: #1e1e2e; /* Match the title color */
-    text-decoration: none; /* Remove underline */
+.metadata-blockchain a,
+.metadata-blockchain a:hover {
+    text-decoration: none;
+    color: #1e1e2e;
 }
 
 .metadata-blockchain a:hover {
+    text-decoration: underline;
     color: #a6e3a1; /* Change color on hover */
-    text-decoration: underline; /* Add underline on hover */
 }
-
-
 
 .image-container {
     width: 100%;
@@ -102,41 +107,9 @@ main {
     transition: transform 0.3s ease;
 }
 
-.description-container {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background: rgba(203, 166, 247, 0.9); /* Mauve with opacity */
-    color: #1e1e2e; /* Dark text color */
-    padding: 1em;
-    box-sizing: border-box;
-    transform: translateY(100%);
-    transition: transform 0.3s ease, opacity 0.3s ease;
-    text-align: center; /* Center the text */
-    border-radius: 0 0 16px 16px; /* Rounded edges at the bottom */
-    overflow: hidden; /* Ensure no overflow */
-}
-
-.description-text {
-    max-height: none; /* Ensure it shows full text */
-    overflow: visible; /* Allow full text to be visible */
-    text-overflow: clip; /* Ensure no ellipsis */
-    margin: 0; /* Remove default margin */
-}
-
-.description-text a {
-    color: #74c7ec; /* Sapphire */
-    text-decoration: underline; /* Underline links */
-}
-
-.description-text a:hover {
-    color: #a6e3a1; /* Green */
-}
-
 .nft-item:hover {
     transform: scale(1.05) rotateX(0deg) rotateY(0deg);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 15px 30px rgb(255, 255, 255, 0.5);
     filter: brightness(1.1); /* Slightly brighten the card on hover */
 }
 
@@ -144,14 +117,10 @@ main {
     transform: scale(1.1); /* Slight zoom effect */
 }
 
-.nft-item:hover .description-container {
-    transform: translateY(0); /* Slide up the description */
-    opacity: 1; /* Ensure description is visible */
-}
-
+.nft-item:hover .description-container,
 .nft-item:hover .top-bar {
-    opacity: 1; /* Show the top bar */
-    transform: translateY(0); /* Slide the top bar into view */
+    opacity: 1; /* Show the top bar and description */
+    transform: translateY(0); /* Slide into view */
 }
 
 /* Footer styling */
@@ -166,14 +135,11 @@ footer {
     left: 0;
     right: 0;
     z-index: 1000;
+    transform: translateY(100%); /* Initially hidden */
 }
 
 .footer-content {
     text-align: center;
-}
-
-.social-media {
-    margin-bottom: 0.5rem; /* Reduced margin */
 }
 
 .social-media a {
@@ -187,26 +153,18 @@ footer {
     vertical-align: middle; /* Aligns the icons properly */
 }
 
-.copyright {
-    color: #cdd6f4;
-    margin: 0;
-}
-
 /* Footer visibility animation */
 footer.hidden {
     transform: translateY(100%);
 }
 
-/* Add these styles to your styles.css */
-
-/* Add these styles to your styles.css */
-
+/* Body blur effect */
 body.blur {
     filter: blur(8px);
     overflow: hidden; /* Prevent scrolling when blurred */
-    transition: filter 0.3s ease;
 }
 
+/* NFT item zoom effect */
 .nft-item.zoomed {
     position: fixed; /* Fix position to overlay the entire viewport */
     top: 0;
@@ -214,73 +172,31 @@ body.blur {
     width: 100vw; /* Full viewport width */
     height: 100vh; /* Full viewport height */
     z-index: 1000; /* High z-index to overlay other content */
-    transition: transform 0.3s ease, z-index 0s; /* Smooth transition */
+    transition: transform 0.3s ease;
 }
 
 .nft-item.zoomed .nft-image {
-    position: absolute; /* Ensure it fills the container */
+    position: absolute;
     top: 50%;
     left: 50%;
-    width: auto;
-    height: auto;
-    max-width: none; /* Allow image to exceed its normal max-width */
-    max-height: none; /* Allow image to exceed its normal max-height */
     transform: translate(-50%, -50%) scale(1.2); /* Center the image and scale */
     object-fit: contain; /* Maintain aspect ratio */
-    transition: transform 0.3s ease;
 }
 
 .nft-item.zoomed .description-container,
 .nft-item.zoomed .top-bar {
-    position: fixed; /* Fix position so it stays in view */
+    position: fixed;
     width: 100%;
+    z-index: 1001; /* Ensure above the image */
     text-align: center;
-    z-index: 1001; /* Ensure it is above the image */
 }
 
 .nft-item.zoomed .description-container {
-    bottom: 0;
-    background: rgba(203, 166, 247, 0.9); /* Mauve with opacity */
-    color: #1e1e2e; /* Dark text color */
-    padding: 1em;
-    box-sizing: border-box;
-    transform: translateY(0); /* Ensure description is visible */
-    opacity: 1; /* Ensure description is visible */
-    transition: opacity 0.3s ease;
+    bottom: 10%;
+    left: 0;
 }
 
 .nft-item.zoomed .top-bar {
-    top: 0;
-    background: rgba(203, 166, 247, 0.7); /* Mauve with transparency */
-    color: #1e1e2e; /* Darker text color */
-    padding: 0.5em 1em;
-    box-sizing: border-box;
-    transform: translateY(0); /* Ensure top bar is visible */
-    opacity: 1; /* Ensure top bar is visible */
-    transition: opacity 0.3s ease;
-}
-
-.nft-item {
-    position: relative; /* Ensure positioning for child elements */
-}
-
-/* Add hover effects */
-.nft-item:hover {
-    transform: scale(1.05);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
-    filter: brightness(1.1); /* Slightly brighten the card on hover */
-}
-
-.nft-item:hover .nft-image {
-    transform: scale(1.1); /* Slight zoom effect */
-}
-
-.nft-item:hover .description-container {
-    transform: translateY(0); /* Slide up the description */
-    opacity: 1; /* Ensure description is visible */
-}
-
-.nft-item:hover .top-bar {
-    opacity: 1; /* Show the top bar */
-    transform: translateY(0); /* Slide the top bar into view */
+    top: 10%;
+    background: rgba(203, 166, 247, 0.9); /* Mauve with opacity */
 }

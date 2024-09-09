@@ -18,9 +18,33 @@ const addZoomEffect = () => {
     });
 };
 
+// Function to handle footer visibility
+const handleFooterVisibility = () => {
+    const footer = document.querySelector('footer');
+
+    const checkScrollPosition = () => {
+        const scrollPosition = window.innerHeight + window.scrollY;
+        const documentHeight = document.documentElement.offsetHeight;
+
+        if (scrollPosition >= documentHeight) {
+            footer.style.opacity = '1';
+            footer.style.transform = 'translateY(0)';
+        } else {
+            footer.style.opacity = '0';
+            footer.style.transform = 'translateY(100%)';
+        }
+    };
+
+    // Initial check
+    checkScrollPosition();
+
+    // Attach scroll event listener
+    window.addEventListener('scroll', checkScrollPosition);
+};
 
 // Run functions after the window has loaded
 window.onload = () => {
     displayNFTs(); // Ensure this function is defined in your app.js
     addZoomEffect(); // Add zoom effect
+    handleFooterVisibility(); // Handle footer visibility
 };
