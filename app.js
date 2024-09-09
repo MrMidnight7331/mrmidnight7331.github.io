@@ -27,7 +27,7 @@ const fetchNFTs = async (chain, walletAddress, apiKey, retries = 3) => {
 
     try {
         const response = await fetch(apiUrl);
-        console.log('API response:', await response.clone().json()); // Log the response for debugging
+        const textResponse = await response.text(); // Get raw text response for debugging
 
         // Check if response status is 429 (Rate Limit Exceeded)
         if (response.status === 429) {
@@ -40,15 +40,18 @@ const fetchNFTs = async (chain, walletAddress, apiKey, retries = 3) => {
             }
         }
 
-        const data = await response.json();
-        
-        if (!data || data.error) {
-            console.error(`Error fetching NFTs from ${chain}:`, data.error);
+        try {
+            const data = JSON.parse(textResponse); // Parse the text response as JSON
+            if (!data || data.error) {
+                console.error(`Error fetching NFTs from ${chain}:`, data.error);
+                return [];
+            }
+            console.log(`Fetched NFTs from ${chain}:`, data);
+            return data.ownedNfts || [];
+        } catch (jsonError) {
+            console.error('Error parsing JSON:', jsonError);
             return [];
         }
-        
-        console.log(`Fetched NFTs from ${chain}:`, data);
-        return data.ownedNfts || [];
     } catch (error) {
         console.error(`Error fetching NFTs from ${chain}:`, error);
         return [];
@@ -86,7 +89,7 @@ const getExplorerUrl = (chain, address) => {
     return baseUrls[chain] + address;
 };
 
-// Function to display NFTs
+// Function to display NFTs for a single wallet
 const displayNFTsForChainAndWallet = async (chain, walletAddress, apiKey, gallery) => {
     const nfts = await fetchNFTs(chain, walletAddress, apiKey);
     const filters = await loadFilters();
@@ -139,6 +142,9 @@ const displayNFTs = async () => {
     // Update the page with the username
     document.getElementById('header-title').textContent = `${username}'s NFT Gallery`;
     document.getElementById('page-title').textContent = `${username}'s NFT Gallery`;
+
+    // Fetch filters
+    const filters = await loadFilters();
 
     // Loop through each wallet address and blockchain
     for (const walletAddress of walletAddresses) {
