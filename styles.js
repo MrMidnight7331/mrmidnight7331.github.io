@@ -1,43 +1,26 @@
+// Function to handle zoom and blur effects
+const addZoomEffect = () => {
+    const nftItems = document.querySelectorAll('.nft-item');
+    const body = document.body;
 
+    nftItems.forEach(item => {
+        const image = item.querySelector('.nft-image');
 
-// Function to handle footer visibility
-// Attach event listeners for hover effects
-const addHoverEffect = () => {
-    const nftImages = document.querySelectorAll('.nft-image');
-    
-    nftImages.forEach(image => {
         image.addEventListener('mouseover', () => {
-            image.style.transform = 'scale(1.1)';
-            image.style.zIndex = '10';
+            item.classList.add('zoomed');
+            body.classList.add('blur');
         });
 
         image.addEventListener('mouseout', () => {
-            image.style.transform = 'scale(1)';
-            image.style.zIndex = '1';
+            item.classList.remove('zoomed');
+            body.classList.remove('blur');
         });
     });
 };
 
-// Function to handle footer visibility
-const handleFooterVisibility = () => {
-    const footer = document.querySelector('footer');
-    
-    window.addEventListener('scroll', () => {
-        if (window.scrollY + window.innerHeight < document.body.scrollHeight - 100) {
-            footer.classList.remove('hidden');
-        } else {
-            footer.classList.add('hidden');
-        }
-    });
-};
 
 // Run functions after the window has loaded
 window.onload = () => {
     displayNFTs(); // Ensure this function is defined in your app.js
-    addHoverEffect();
-    handleFooterVisibility();
+    addZoomEffect(); // Add zoom effect
 };
-
-
-
-

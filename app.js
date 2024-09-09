@@ -1,11 +1,19 @@
 // Replace with your Alchemy API Key
 const apiKey = "V02Btj6wPHcO9W5SYKk5cocTEli93zbV";
 
-// Define your wallet addresses here
-const walletAddresses = [
-    '0x4bBB452a380A73E8c969055A23d71AB4487c32AD',
-    '0x939A9353e1a72e5d6Da07424c74815a6651a86f4' // Replace with your wallet address
-];
+// Fetch configuration from config.json
+const fetchConfig = async () => {
+    try {
+        const response = await fetch('configs/config.json');
+        const config = await response.json();
+        console.log('Config loaded:', config);
+        return config;
+    } catch (error) {
+        console.error('Error loading configuration:', error);
+        return { username: 'DefaultUser', walletAddresses: [] };
+    }
+};
+
 
 // Convert IPFS URL to HTTP URL
 const convertIPFSUrl = (ipfsUrl) => {
@@ -20,15 +28,15 @@ const fetchNFTs = async (chain, walletAddress, retries = 3) => {
     const apiUrl = chain === 'ethereum'
         ? `https://eth-mainnet.g.alchemy.com/v2/${apiKey}/getNFTsForOwner?owner=${walletAddress}&withMetadata=true`
         : `https://polygon-mainnet.g.alchemy.com/v2/${apiKey}/getNFTsForOwner?owner=${walletAddress}&withMetadata=true`;
-    
+
     try {
         const response = await fetch(apiUrl);
+        console.log('API response:', await response.clone().json()); // Log the response for debugging
 
         // Check if response status is 429 (Rate Limit Exceeded)
         if (response.status === 429) {
             if (retries > 0) {
                 console.warn(`Rate limit exceeded. Retrying ${retries} more times...`);
-                // Wait for a bit before retrying
                 await new Promise(resolve => setTimeout(resolve, 5000)); // 5 seconds delay
                 return fetchNFTs(chain, walletAddress, retries - 1);
             } else {
@@ -38,7 +46,6 @@ const fetchNFTs = async (chain, walletAddress, retries = 3) => {
 
         const data = await response.json();
         
-        // Check for data or errors
         if (!data || data.error) {
             console.error(`Error fetching NFTs from ${chain}:`, data.error);
             return [];
@@ -52,10 +59,11 @@ const fetchNFTs = async (chain, walletAddress, retries = 3) => {
     }
 };
 
+
 // Load and parse filter.json
 const loadFilters = async () => {
     try {
-        const response = await fetch('filter.json');
+        const response = await fetch('./configs/filter.json');
         const data = await response.json();
         return data.words || [];
     } catch (error) {
@@ -70,15 +78,27 @@ const isFiltered = (title, description, filters) => {
     return filters.some(word => text.includes(word.toLowerCase()));
 };
 
+// Function to shorten the wallet address
+const shortenAddress = (address) => {
+    return address.slice(0, 6) + '...' + address.slice(-4);
+};
+
+const getExplorerUrl = (chain, address) => {
+    const baseUrls = {
+        ethereum: 'https://etherscan.io/address/',
+        polygon: 'https://polygonscan.com/address/'
+    };
+    return baseUrls[chain] + address;
+};
+
 // Function to display NFTs
 const displayNFTsForChainAndWallet = async (chain, walletAddress, gallery) => {
     const nfts = await fetchNFTs(chain, walletAddress);
     const filters = await loadFilters();
+    const shortenedAddress = shortenAddress(walletAddress);
 
     // Filter out spam NFTs
     const filteredNFTs = nfts.filter(nft => !isFiltered(nft.metadata?.name || '', nft.metadata?.description || '', filters));
-
-
 
     // Display each NFT
     filteredNFTs.forEach(nft => {
@@ -86,6 +106,7 @@ const displayNFTsForChainAndWallet = async (chain, walletAddress, gallery) => {
         const imageUrl = convertIPFSUrl(metadata.image || '');
         const name = metadata.name || 'Unknown';
         const description = metadata.description || 'No description';
+        const explorerUrl = getExplorerUrl(chain, walletAddress);
 
         const nftElement = document.createElement('div');
         nftElement.className = 'nft-item';
@@ -93,7 +114,9 @@ const displayNFTsForChainAndWallet = async (chain, walletAddress, gallery) => {
         nftElement.innerHTML = `
             <div class="top-bar">
                 <p class="metadata-title">${name}</p>
-                <p class="metadata-blockchain">${chain.charAt(0).toUpperCase() + chain.slice(1)}</p>
+                <p class="metadata-blockchain">
+                    <a href="${explorerUrl}" target="_blank" rel="noopener noreferrer">${shortenedAddress} : ${chain.charAt(0).toUpperCase() + chain.slice(1)}</a>
+                </p>
             </div>
             <div class="image-container">
                 <img src="${imageUrl}" alt="${name}" class="nft-image">
@@ -111,6 +134,15 @@ const displayNFTsForChainAndWallet = async (chain, walletAddress, gallery) => {
 const displayNFTs = async () => {
     const gallery = document.getElementById('nft-gallery');
     gallery.innerHTML = ''; // Clear previous content
+
+    // Fetch configuration
+    const config = await fetchConfig();
+    const walletAddresses = config.walletAddresses;
+    const username = config.username;
+
+    // Update the page with the username
+    document.getElementById('header-title').textContent = `${username}'s NFT Gallery`;
+    document.getElementById('page-title').textContent = `${username}'s NFT Gallery`;
 
     // Loop through each wallet address and blockchain
     for (const walletAddress of walletAddresses) {
