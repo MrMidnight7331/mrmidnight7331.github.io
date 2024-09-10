@@ -6,19 +6,20 @@ const addZoomEffect = () => {
     nftItems.forEach(item => {
         const image = item.querySelector('.nft-image');
 
+        // Add zoom and blur on mouse over
         image.addEventListener('mouseover', () => {
-            item.classList.add('zoomed');
-            body.classList.add('blur');
+            item.classList.add('zoomed'); // Add zoom effect to NFT item
+            body.classList.add('blur'); // Add blur effect to the body
         });
 
+        // Remove zoom and blur on mouse out
         image.addEventListener('mouseout', () => {
-            item.classList.remove('zoomed');
-            body.classList.remove('blur');
+            item.classList.remove('zoomed'); // Remove zoom effect from NFT item
+            body.classList.remove('blur'); // Remove blur effect from the body
         });
     });
 };
 
-// Function to handle footer visibility
 // Function to handle footer visibility
 const handleFooterVisibility = () => {
     const footer = document.querySelector('footer');
@@ -43,12 +44,11 @@ const handleFooterVisibility = () => {
     window.addEventListener('scroll', checkScrollPosition);
 };
 
-
-
+// Function to handle flipping NFT cards
 const toggleFlip = (event) => {
     event.stopPropagation(); // Prevent the event from bubbling up
     const nftItem = event.currentTarget.closest('.nft-item');
-    nftItem.classList.toggle('flip');
+    nftItem.classList.toggle('flip'); // Toggle flip class to rotate the card
 };
 
 // Run functions after the window has loaded

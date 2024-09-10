@@ -46,6 +46,10 @@ main {
     transform-style: preserve-3d; /* Necessary for 3D flip effect */
 }
 
+.nft-item:hover .nft-image {
+    transform: scale(1.1); /* Zoom in on hover */
+}
+
 .nft-item.flip .nft-front {
     transform: rotateY(180deg); /* Flip the front side */
 }
@@ -109,7 +113,6 @@ main {
     border-radius: 50%;
 }
 
-
 .nft-item.flip .flip-back-button {
     display: flex; /* Show button on the back */
 }
@@ -125,6 +128,7 @@ main {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform 0.5s ease; /* Smooth transition for zoom */
 }
 
 .nft-item .top-bar,
@@ -181,8 +185,6 @@ main {
     color: #f38ba8;
 }
 
-
-/* Footer styling */
 footer {
     background-color: rgba(49, 50, 68, 0.9); /* Surface0 with slight transparency */
     color: #cdd6f4; /* Text */
@@ -213,18 +215,15 @@ footer {
     vertical-align: middle; /* Aligns the icons properly */
 }
 
-/* Footer visibility animation */
 footer.hidden {
     transform: translateY(100%);
 }
 
-/* Body blur effect */
 body.blur {
     filter: blur(8px);
     overflow: hidden; /* Prevent scrolling when blurred */
 }
 
-/* NFT item zoom effect */
 .nft-item.zoomed {
     position: fixed; /* Fix position to overlay the entire viewport */
     top: 0;
@@ -261,7 +260,6 @@ body.blur {
     background: rgba(203, 166, 247, 0.9); /* Mauve with opacity */
 }
 
-/* Back of the NFT card adjustments */
 .nft-back {
     z-index: 1;
     transform: rotateY(180deg);
@@ -277,40 +275,19 @@ body.blur {
     overflow: hidden; /* Prevent overflow */
 }
 
-.info-title {
-    font-size: 2em; /* Adjust this value as needed */
-    font-weight: bold; /* Optional: makes the title bold */
-    color: #1e1e2e; /* Optional: sets the text color */
-    margin: 0;
-    padding: 0.5em 0; /* Optional: adds vertical padding */
-}
-
-
-
-.metadata-title {
-    font-size: 1.3em; /* Fixed font size for title */
+.back-title {
+    font-family: 'Times New Roman', serif; /* Different font family for back text */
+    font-size: 1.5em;
     font-weight: bold;
+    color: #1e1e2e; /* Prominent color */
+    margin-bottom: 0.5em; /* Margin to create space between title and other text */
+}
+
+.attribute-list {
+    list-style: none;
+    padding: 0;
     margin: 0;
-    padding: 0.5em;
-    color: #1e1e2e; /* Dark text color */
-    background-color: rgba(69, 71, 90, 0.2); /* Slightly transparent background matching NFT background */
-    border-radius: 8px; /* Rounded corners */
-    text-align: center; /* Center title text */
-    width: 100%; /* Full width to ensure alignment */
-}
-
-.back-content {
-    text-align: center; /* Center all text */
-    margin-top: 1em; /* Margin for spacing */
-}
-
-.back-content p {
-    margin: 8px 0;
-    font-size: 1em; /* Responsive font size for back content text */
-    line-height: 1.4; /* Adjust line height for readability */
-}
-
-.back-content strong {
-    font-weight: bold;
-    font-size: 1.2em; /* Responsive font size for back content strong text */
+    font-family: 'Arial', sans-serif;
+    font-size: 1.1em;
+    text-align: left; /* Align text to the left */
 }
