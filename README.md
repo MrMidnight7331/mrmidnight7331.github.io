@@ -52,11 +52,15 @@ Feel free to contribute to this project or use it as a base for your own NFT gal
 - JavaScript
 - Alchemy API
 
-## CHANGELOG
-
+## Changelog
 - V1.0 Initial Deployment
 - V1.1 Changes in color scheme, added more lighting, added better footbar animation
 
+## Future Plans:
+- Add token ID and collection address to title of card instead of ethereum address.
+- Add options to change dark, light mode
+- Add options to view NFTs from other addresses
+- Add more customization methods like color scheme
 
 ## Contact
 Feel free ho contact me on my socials if you face any problem or need help with tbe setup process!
