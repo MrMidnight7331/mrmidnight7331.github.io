@@ -61,6 +61,7 @@ Feel free to contribute to this project or use it as a base for your own NFT gal
 - Add options to change dark, light mode
 - Add options to view NFTs from other addresses
 - Add more customization methods like color scheme
+- Add more info on the back side of the card. Turn around transition with smooth animation
 
 ## Contact
 Feel free ho contact me on my socials if you face any problem or need help with tbe setup process!
