@@ -1,5 +1,5 @@
 # Dynamic NFT Gallery
-**Current Version: 1.1**
+**Current Version: 1.2**
 
 ## Introduction
 
@@ -53,15 +53,23 @@ Feel free to contribute to this project or use it as a base for your own NFT gal
 - Alchemy API
 
 ## Changelog
-- V1.0 Initial Deployment
-- V1.1 Changes in color scheme, added more lighting, added better footbar animation
+- V1.0 
+    - Initial Deployment
+- V1.1
+    - Changes in color scheme
+    - Lighting improvement
+    - Added better footbar animation
+- V1.2
+    - Cards are flippable for more information
+    - General bug fixing
+    - Change ethereum address link to contract address link
 
 ## Future Plans:
-- Add token ID and collection address to title of card instead of ethereum address.
+- ~~Add collection address to title of card instead of wallet address.~~
 - Add options to change dark, light mode
 - Add options to view NFTs from other addresses
 - Add more customization methods like color scheme
-- Add more info on the back side of the card. Turn around transition with smooth animation
+- ~~Add more info on the back side of the card. Turn around transition with smooth animation~~
 
 ## Contact
 Feel free ho contact me on my socials if you face any problem or need help with tbe setup process!

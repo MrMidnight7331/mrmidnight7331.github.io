@@ -19,6 +19,24 @@ const convertIPFSUrl = (ipfsUrl) => {
     return ipfsUrl;
 };
 
+// Load and parse filter.json
+const loadFilters = async () => {
+    try {
+        const response = await fetch('configs/filter.json');
+        const data = await response.json();
+        return data.words || [];
+    } catch (error) {
+        console.error('Error loading filters:', error);
+        return [];
+    }
+};
+
+// Check if an NFT's title or description contains any of the filtered words
+const isFiltered = (title, description, filters) => {
+    const text = (title + ' ' + description).toLowerCase();
+    return filters.some(word => text.includes(word.toLowerCase()));
+};
+
 // Fetch NFTs from Alchemy API for a given chain with retry logic
 const fetchNFTs = async (chain, walletAddress, apiKey, retries = 3) => {
     const apiUrl = chain === 'ethereum'
@@ -58,29 +76,12 @@ const fetchNFTs = async (chain, walletAddress, apiKey, retries = 3) => {
     }
 };
 
-// Load and parse filter.json
-const loadFilters = async () => {
-    try {
-        const response = await fetch('./configs/filter.json');
-        const data = await response.json();
-        return data.words || [];
-    } catch (error) {
-        console.error('Error loading filters:', error);
-        return [];
-    }
-};
-
-// Check if an NFT's title or description contains any of the filtered words
-const isFiltered = (title, description, filters) => {
-    const text = (title + ' ' + description).toLowerCase();
-    return filters.some(word => text.includes(word.toLowerCase()));
-};
-
-// Function to shorten the wallet address
+// Function to shorten the address
 const shortenAddress = (address) => {
     return address.slice(0, 6) + '...' + address.slice(-4);
 };
 
+// Function to get explorer URL (Etherscan/Polygonscan)
 const getExplorerUrl = (chain, address) => {
     const baseUrls = {
         ethereum: 'https://etherscan.io/address/',
@@ -93,7 +94,6 @@ const getExplorerUrl = (chain, address) => {
 const displayNFTsForChainAndWallet = async (chain, walletAddress, apiKey, gallery) => {
     const nfts = await fetchNFTs(chain, walletAddress, apiKey);
     const filters = await loadFilters();
-    const shortenedAddress = shortenAddress(walletAddress);
 
     // Filter out spam NFTs
     const filteredNFTs = nfts.filter(nft => !isFiltered(nft.metadata?.name || '', nft.metadata?.description || '', filters));
@@ -101,31 +101,64 @@ const displayNFTsForChainAndWallet = async (chain, walletAddress, apiKey, galler
     // Display each NFT
     filteredNFTs.forEach(nft => {
         const metadata = nft.metadata || {};
+        const contractAddress = nft.contract.address || '';
         const imageUrl = convertIPFSUrl(metadata.image || '');
         const name = metadata.name || 'Unknown';
         const description = metadata.description || 'No description';
-        const explorerUrl = getExplorerUrl(chain, walletAddress);
+        const shortenedContractAddress = shortenAddress(contractAddress);
+        const explorerUrl = getExplorerUrl(chain, contractAddress);
+
+        // Extract additional data for the backside
+        const floorPrice = nft.contractMetadata?.openSea?.floorPrice ? `${nft.contractMetadata.openSea.floorPrice} ETH` : 'Not available';
+        const totalSupply = nft.contractMetadata?.totalSupply || 'Unknown';
+        const tokenType = nft.id.tokenMetadata?.tokenType || 'Unknown';
+        const attributes = metadata.attributes
+            ? metadata.attributes.map(attr => `${attr.trait_type}: ${attr.value}`).join('<br>')
+            : 'No attributes available';
 
         const nftElement = document.createElement('div');
         nftElement.className = 'nft-item';
 
         nftElement.innerHTML = `
-            <div class="top-bar">
-                <p class="metadata-title">${name}</p>
-                <p class="metadata-blockchain">
-                    <a href="${explorerUrl}" target="_blank" rel="noopener noreferrer">${shortenedAddress} : ${chain.charAt(0).toUpperCase() + chain.slice(1)}</a>
-                </p>
+            <div class="nft-front">
+                <div class="top-bar">
+                    <p class="metadata-title">${name}</p>
+                    <p class="metadata-blockchain">
+                        <a href="${explorerUrl}" target="_blank" rel="noopener noreferrer">${shortenedContractAddress} : ${chain.charAt(0).toUpperCase() + chain.slice(1)}</a>
+                    </p>
+                </div>
+                <div class="image-container">
+                    <img src="${imageUrl}" alt="${name}" class="nft-image">
+                </div>
+                <div class="description-container">
+                    <p class="description-text">${description}</p>
+                </div>
+                <div class="three-dots" onclick="toggleFlip(event)">
+                    <span class="middle-dot"></span>
+                </div>
             </div>
-            <div class="image-container">
-                <img src="${imageUrl}" alt="${name}" class="nft-image">
-            </div>
-            <div class="description-container">
-                <p class="description-text">${description}</p>
+            <div class="nft-back">
+                <div class="back-content">
+                    <p><strong>Floor Price:</strong> ${floorPrice}</p>
+                    <p><strong>Total Supply:</strong> ${totalSupply}</p>
+                    <p><strong>Token Type:</strong> ${tokenType}</p>
+                    <p><strong>Attributes:</strong><br>${attributes}</p>
+                </div>
+                <div class="three-dots" onclick="toggleFlip(event)">
+                    <span class="middle-dot"></span>
+                </div>
             </div>
         `;
 
         gallery.appendChild(nftElement);
     });
+};
+
+// Function to toggle the flip effect on the NFT card
+const toggleFlip = (event) => {
+    event.stopPropagation(); // Prevent the event from bubbling up
+    const nftItem = event.currentTarget.closest('.nft-item');
+    nftItem.classList.toggle('flip');
 };
 
 // Function to fetch and display NFTs from all wallet addresses and chains
@@ -142,9 +175,6 @@ const displayNFTs = async () => {
     // Update the page with the username
     document.getElementById('header-title').textContent = `${username}'s NFT Gallery`;
     document.getElementById('page-title').textContent = `${username}'s NFT Gallery`;
-
-    // Fetch filters
-    const filters = await loadFilters();
 
     // Loop through each wallet address and blockchain
     for (const walletAddress of walletAddresses) {

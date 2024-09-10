@@ -43,6 +43,14 @@ const handleFooterVisibility = () => {
     window.addEventListener('scroll', checkScrollPosition);
 };
 
+
+
+const toggleFlip = (event) => {
+    event.stopPropagation(); // Prevent the event from bubbling up
+    const nftItem = event.currentTarget.closest('.nft-item');
+    nftItem.classList.toggle('flip');
+};
+
 // Run functions after the window has loaded
 window.onload = () => {
     displayNFTs(); // Ensure this function is defined in your app.js to display NFTs
