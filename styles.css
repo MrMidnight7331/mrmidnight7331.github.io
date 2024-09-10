@@ -13,7 +13,7 @@ header {
     color: #cdd6f4; /* Text */
     text-align: center;
     padding: 1em 0;
-    box-shadow: 0 4px 6px rgba(203, 166, 247, 0.5);
+    box-shadow: 0 4px 6px rgba(203, 166, 247, 0.7);
     border-bottom: 2px solid #cba6f7; /* Mauve for a subtle accent */
 }
 
@@ -88,11 +88,11 @@ main {
 
 .three-dots {
     position: absolute;
-    top: 10px;
+    top: 16px;
     right: 10px;
     width: 30px;
     height: 30px;
-    background: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.6);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -103,7 +103,7 @@ main {
 }
 
 .three-dots:hover {
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0);
 }
 
 .three-dots .middle-dot {
@@ -188,17 +188,23 @@ main {
 footer {
     background-color: rgba(49, 50, 68, 0.9); /* Surface0 with slight transparency */
     color: #cdd6f4; /* Text */
-    padding: 0.5em 2em; /* Reduced padding */
+    padding: 1em 2em; /* Adjust padding */
     box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.2); /* Slight shadow */
-    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out; /* Smooth transition */
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
     z-index: 1000;
     transform: translateY(100%); /* Initially hidden */
-    opacity: 0; /* Hidden at first */
+    opacity: 0; /* Initially hidden */
+    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out; /* Smooth transitions */
 }
+
+footer.visible {
+    transform: translateY(0); /* Show footer */
+    opacity: 1; /* Show footer */
+}
+
 
 .footer-content {
     text-align: center;
@@ -291,3 +297,4 @@ body.blur {
     font-size: 1.1em;
     text-align: left; /* Align text to the left */
 }
+

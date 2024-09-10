@@ -1,3 +1,5 @@
+// Assuming styles.js only handles styles and effects related to CSS
+
 // Function to handle zoom and blur effects
 const addZoomEffect = () => {
     const nftItems = document.querySelectorAll('.nft-item');
@@ -20,40 +22,39 @@ const addZoomEffect = () => {
     });
 };
 
-// Function to handle footer visibility
 const handleFooterVisibility = () => {
     const footer = document.querySelector('footer');
+    if (!footer) {
+        console.error('Footer element not found');
+        return;
+    }
 
     const checkScrollPosition = () => {
         const scrollPosition = window.innerHeight + window.scrollY;
         const documentHeight = document.documentElement.offsetHeight;
 
+
         if (scrollPosition >= documentHeight) {
-            footer.style.opacity = '1'; // Make footer visible
-            footer.style.transform = 'translateY(0)'; // Slide up the footer
+            footer.style.opacity = '1';
+            footer.style.transform = 'translateY(0)';
         } else {
-            footer.style.opacity = '0'; // Hide footer smoothly
-            footer.style.transform = 'translateY(100%)'; // Slide down the footer smoothly
+            footer.style.opacity = '0';
+            footer.style.transform = 'translateY(100%)';
         }
     };
 
-    // Initial check to hide the footer before scrolling
     checkScrollPosition();
-
-    // Attach scroll event listener
     window.addEventListener('scroll', checkScrollPosition);
 };
 
-// Function to handle flipping NFT cards
-const toggleFlip = (event) => {
-    event.stopPropagation(); // Prevent the event from bubbling up
-    const nftItem = event.currentTarget.closest('.nft-item');
-    nftItem.classList.toggle('flip'); // Toggle flip class to rotate the card
-};
+// Directly test if the footer visibility works correctly
+handleFooterVisibility();
+
 
 // Run functions after the window has loaded
 window.onload = () => {
-    displayNFTs(); // Ensure this function is defined in your app.js to display NFTs
     addZoomEffect(); // Apply zoom and blur effects to NFT items
     handleFooterVisibility(); // Manage footer visibility based on scroll position
 };
+
+console.log('styles.js loaded successfully!'); // Debugging line
