@@ -10,7 +10,7 @@ Welcome to my NFT gallery website! This was designed to showcase a NFT collectio
 
 I created this website initially to showcase my own NFT collection so I could put the website on LinkTree. However after googeling I wasn't able to find a valid provider that will do this job. Every Website I found was inputting a address and it will display the images. However I wanted a more static yet dynamic solution. This is the solution
 
-## Your Own Version
+## Make if yours!
 
 If you’re interested in customizing or using this site for your own purposes, you can copy the code from this repository. Here’s how:
 
