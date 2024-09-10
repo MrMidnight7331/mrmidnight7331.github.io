@@ -56,7 +56,7 @@ Feel free ho contact me on my socials if you face any problem or need help with 
 
 - [Twitter: @MrMidnight53](https://twitter.com/MrMidnight53)
 - [Instagram: mrmidnight7331](https://www.instagram.com/mrmidnight7331)
-- [LinkTree](https://linktr.ee/MrMidnight53)
+- [LinkTree: MrMidnight53](https://linktr.ee/MrMidnight53)
 
 ## Donate
 If you think I did a good job feel free to donate here to help me create OpenSource Projects (Money doesn't grow on OpenSource):
