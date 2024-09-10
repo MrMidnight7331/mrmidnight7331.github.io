@@ -1,6 +1,5 @@
-# [mrmidnight7331.github.io](https://mrmidnight7331.github.io)
-
-> Made by: MrMidnight 2024
+# Dynamic NFT Gallery
+**Current Version: 1.1**
 
 ## Introduction
 
@@ -9,6 +8,20 @@ Welcome to my NFT gallery website! This was designed to showcase a NFT collectio
 ## Why I Made It
 
 I created this website initially to showcase my own NFT collection so I could put the website on LinkTree. However after googeling I wasn't able to find a valid provider that will do this job. Every Website I found was inputting a address and it will display the images. However I wanted a more static yet dynamic solution. This is the solution
+
+
+## Features
+
+- Interactive NFT gallery
+- Smooth hover effects and animations
+- Integration with Ethereum and Polygon blockchains
+- Supports multiple wallets:
+    - First wallet address is the "main" wallet and will be loaded on reload
+    - Every subsequent wallet will be loaded in about 3 seconds after each other due to API limitations.
+- Customizable based on your wallet address and NFTs
+- Using the Archemy API
+- Customizable Filter against scam or unwanted NFTs
+
 
 ## Make if yours!
 
@@ -32,24 +45,18 @@ If you’re interested in customizing or using this site for your own purposes, 
 
 Feel free to contribute to this project or use it as a base for your own NFT gallery!
 
-## Features
-
-- Interactive NFT gallery
-- Smooth hover effects and animations
-- Integration with Ethereum and Polygon blockchains
-- Supports multiple wallets:
-    - First wallet address is the "main" wallet and will be loaded on reload
-    - Every subsequent wallet will be loaded in about 3 seconds after each other due to API limitations.
-- Customizable based on your wallet address and NFTs
-- Using the Archemy API
-- Customizable Filter against scam or unwanted NFTs
-
 ## Technologies Used
 
 - HTML
 - CSS
 - JavaScript
 - Alchemy API
+
+## CHANGELOG
+
+- V1.0 Initial Deployment
+- V1.1 Changes in color scheme, added more lighting, added better footbar animation
+
 
 ## Contact
 Feel free ho contact me on my socials if you face any problem or need help with tbe setup process!
