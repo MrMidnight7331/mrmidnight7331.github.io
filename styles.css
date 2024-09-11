@@ -1,3 +1,4 @@
+/* Base styles (Dark Mode) */
 body {
     font-family: 'Arial', sans-serif;
     background-color: #1e1e2e; /* Base */
@@ -5,7 +6,7 @@ body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    transition: filter 0.3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease, filter 0.3s ease;
 }
 
 header {
@@ -15,6 +16,7 @@ header {
     padding: 1em 0;
     box-shadow: 0 4px 6px rgba(203, 166, 247, 0.7);
     border-bottom: 2px solid #cba6f7; /* Mauve for a subtle accent */
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 main {
@@ -74,14 +76,14 @@ main {
 
 .nft-back {
     z-index: 1;
-    background-color: #cba6f7; /* New background color for the back side */
+    background-color: #cba6f7; /* Background color */
     padding: 20px;
     display: flex;
     flex-direction: column;
     justify-content: center; /* Center content vertically */
     align-items: center; /* Center content horizontally */
     color: #333;
-    font-size: 1.2em; /* Default font size for back text */
+    font-size: 1.2em; /* Responsive font size for back text */
     box-sizing: border-box;
     overflow: hidden; /* Prevent overflow */
 }
@@ -185,6 +187,7 @@ main {
     color: #f38ba8;
 }
 
+/* Footer Styles */
 footer {
     background-color: rgba(49, 50, 68, 0.9); /* Surface0 with slight transparency */
     color: #cdd6f4; /* Text */
@@ -200,12 +203,15 @@ footer {
     transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out; /* Smooth transitions */
 }
 
-footer.visible {
-    transform: translateY(0); /* Show footer */
-    opacity: 1; /* Show footer */
+/* Footer styles for light mode */
+body.light-mode footer {
+    background-color: rgba(255, 255, 255, 0.9); /* Light transparent background for footer */
+    color: #000000; /* Text color for footer */
+    box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1); /* Light shadow for footer */
 }
 
 
+/* Footer content alignment */
 .footer-content {
     text-align: center;
 }
@@ -220,6 +226,7 @@ footer.visible {
     height: 24px;
     vertical-align: middle; /* Aligns the icons properly */
 }
+
 
 footer.hidden {
     transform: translateY(100%);
@@ -298,3 +305,82 @@ body.blur {
     text-align: left; /* Align text to the left */
 }
 
+/* Toggle Button Style */
+.mode-toggle {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: transparent;
+    border: none;
+    font-size: 2em;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    color: inherit; /* Inherit color based on mode */
+}
+
+.mode-toggle:hover {
+    transform: scale(1.1);
+}
+
+.sun-moon-icon {
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+/* Light Mode Styles */
+body.light-mode {
+    background-color: #eff1f5; /* Base color for light mode */
+    color: #313244; /* Text color for light mode */
+}
+
+.light-mode header {
+    background-color: #eff1f5; /* Light background for header */
+    color: #313244; /* Text color for header */
+}
+
+.light-mode .nft-item {
+    background-color: #eff1f5; /* White background for NFT items */
+    color: #313244; /* Text color for NFT items */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Light shadow for NFT items */
+}
+
+.light-mode footer {
+    background-color: rgba(255, 255, 255, 0.9); /* Light transparent background for footer */
+    color: #313244; /* Text color for footer */
+}
+body.light-mode .nft-back {
+    background-color: #f1f1f1; /* Lighter background color for light mode */
+    color: #000000; /* Darker text color for better readability */
+}
+
+
+
+
+/* Dark Mode Styles */
+body.dark-mode {
+    background-color: #1e1e2e; /* Base color for dark mode */
+    color: #cdd6f4; /* Text color for dark mode */
+}
+
+.dark-mode header {
+    background-color: #313244; /* Dark background for header */
+    color: #cdd6f4; /* Text color for header */
+}
+
+.dark-mode .nft-item {
+    background-color: #45475a; /* Dark background for NFT items */
+    color: #cdd6f4; /* Text color for NFT items */
+    box-shadow: 0 8px 16px rgba(255, 255, 255, 0.3); /* Light shadow for NFT items */
+}
+
+.dark-mode footer {
+    background-color: rgba(49, 50, 68, 0.9); /* Dark transparent background for footer */
+    color: #cdd6f4; /* Text color for footer */
+}
+
+
+/* Dark Mode Styles */
+body.dark-mode .nft-back {
+    background-color: #cba6f7; /* Mauve background color for dark mode */
+    color: #333333; /* Dark text color for dark mode */
+}
