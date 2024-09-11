@@ -14,7 +14,7 @@ header {
     color: #cdd6f4; /* Text */
     text-align: center;
     padding: 1em 0;
-    box-shadow: 0 4px 6px rgba(203, 166, 247, 0.7);
+    box-shadow: 0 4px 6px rgba(203, 166, 247, 0.8);
     border-bottom: 2px solid #cba6f7; /* Mauve for a subtle accent */
     transition: background-color 0.3s ease, color 0.3s ease;
 }
@@ -38,7 +38,6 @@ main {
     width: 400px; /* Increased width */
     height: 500px; /* Increased height */
     max-width: 100%; /* Ensure it doesn't overflow the screen */
-    box-shadow: 0 8px 16px rgba(255, 255, 255, 0.3);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -50,6 +49,7 @@ main {
 
 .nft-item:hover .nft-image {
     transform: scale(1.1); /* Zoom in on hover */
+
 }
 
 .nft-item.flip .nft-front {
@@ -74,19 +74,7 @@ main {
     z-index: 2;
 }
 
-.nft-back {
-    z-index: 1;
-    background-color: #cba6f7; /* Background color */
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center; /* Center content vertically */
-    align-items: center; /* Center content horizontally */
-    color: #333;
-    font-size: 1.2em; /* Responsive font size for back text */
-    box-sizing: border-box;
-    overflow: hidden; /* Prevent overflow */
-}
+
 
 .three-dots {
     position: absolute;
@@ -105,7 +93,7 @@ main {
 }
 
 .three-dots:hover {
-    background: rgba(255, 255, 255, 0);
+    background: rgba(250, 179, 135, 0.9);
 }
 
 .three-dots .middle-dot {
@@ -192,7 +180,7 @@ footer {
     background-color: rgba(49, 50, 68, 0.9); /* Surface0 with slight transparency */
     color: #cdd6f4; /* Text */
     padding: 1em 2em; /* Adjust padding */
-    box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.2); /* Slight shadow */
+    box-shadow: 0 -4px 6px rgba(203, 166, 247, 0.8); /* Slight shadow */
     position: fixed;
     bottom: 0;
     left: 0;
@@ -205,9 +193,9 @@ footer {
 
 /* Footer styles for light mode */
 body.light-mode footer {
-    background-color: rgba(255, 255, 255, 0.9); /* Light transparent background for footer */
+    background-color: rgba(255, 255, 255, 0.3); /* Light transparent background for footer */
     color: #000000; /* Text color for footer */
-    box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1); /* Light shadow for footer */
+    box-shadow: 0 -4px 6px rgba(180, 190, 254, 0.8); /* Light shadow for footer */
 }
 
 
@@ -336,23 +324,20 @@ body.light-mode {
 .light-mode header {
     background-color: #eff1f5; /* Light background for header */
     color: #313244; /* Text color for header */
+    box-shadow: 0 4px 6px rgba(180, 190, 254, 0.8); /* Light shadow for header */
+    border-bottom: 2px solid #b4befe; /* Mauve for a subtle accent */
 }
 
 .light-mode .nft-item {
     background-color: #eff1f5; /* White background for NFT items */
     color: #313244; /* Text color for NFT items */
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Light shadow for NFT items */
+    box-shadow: 0 8px 16px rgba(180, 190, 254, 0.8); /* Light shadow for NFT items */
 }
 
-.light-mode footer {
-    background-color: rgba(255, 255, 255, 0.9); /* Light transparent background for footer */
-    color: #313244; /* Text color for footer */
-}
 body.light-mode .nft-back {
     background-color: #f1f1f1; /* Lighter background color for light mode */
-    color: #000000; /* Darker text color for better readability */
+    color: #cba6f7; /* Darker text color for better readability */
 }
-
 
 
 
@@ -363,14 +348,14 @@ body.dark-mode {
 }
 
 .dark-mode header {
-    background-color: #313244; /* Dark background for header */
+    background-color: #1e1e2e; /* Dark background for header */
     color: #cdd6f4; /* Text color for header */
 }
 
 .dark-mode .nft-item {
     background-color: #45475a; /* Dark background for NFT items */
     color: #cdd6f4; /* Text color for NFT items */
-    box-shadow: 0 8px 16px rgba(255, 255, 255, 0.3); /* Light shadow for NFT items */
+    box-shadow: 0 8px 16px rgba(203, 166, 247, 0.8); /* Light shadow for NFT items */
 }
 
 .dark-mode footer {
@@ -381,6 +366,7 @@ body.dark-mode {
 
 /* Dark Mode Styles */
 body.dark-mode .nft-back {
-    background-color: #cba6f7; /* Mauve background color for dark mode */
-    color: #333333; /* Dark text color for dark mode */
+    background-color: #1e1e2e; /* Mauve background color for dark mode */
+    color: #b4befe; /* Dark text color for dark mode */
+    
 }
