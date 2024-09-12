@@ -57,32 +57,11 @@ const handleFooterVisibility = () => {
 // Call the function on page load
 window.addEventListener('load', handleFooterVisibility);
 
-// Function to toggle between light and dark mode
-const toggleTheme = () => {
-    const body = document.body;
-    const themeToggleButton = document.getElementById('theme-toggle');
-    const sunMoonIcon = themeToggleButton.querySelector('.sun-moon-icon');
-    
-    // Toggle the light and dark mode classes
-    body.classList.toggle('light-mode');
-    body.classList.toggle('dark-mode');
-
-    // Update the icon based on the current mode
-    if (body.classList.contains('dark-mode')) {
-        sunMoonIcon.textContent = '🌙'; // Moon icon for dark mode
-    } else {
-        sunMoonIcon.textContent = '☀️'; // Sun icon for light mode
-    }
-
-    // Save user preference in a cookie
-    document.cookie = `theme=${body.classList.contains('dark-mode') ? 'dark' : 'light'}; path=/`;
-};
-
-// Function to set a cookie
+// Function to set a cookie with an expiration date
 const setCookie = (name, value, days) => {
     const date = new Date();
-    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-    const expires = "expires=" + date.toUTCString();
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000)); // Set expiration in days
+    const expires = "expires=" + date.toUTCString(); 
     document.cookie = name + "=" + value + ";" + expires + ";path=/";
 };
 
@@ -91,36 +70,53 @@ const getCookie = (name) => {
     const nameEQ = name + "=";
     const cookiesArray = document.cookie.split(';');
     for (let i = 0; i < cookiesArray.length; i++) {
-        let cookie = cookiesArray[i];
-        while (cookie.charAt(0) === ' ') cookie = cookie.substring(1);
+        let cookie = cookiesArray[i].trim();
         if (cookie.indexOf(nameEQ) === 0) return cookie.substring(nameEQ.length, cookie.length);
     }
     return null;
 };
 
-// Function to apply the user's preferred theme (from cookie)
-const applyStoredTheme = () => {
-    const storedTheme = getCookie('theme');
+// Function to toggle between light and dark mode
+const toggleTheme = () => {
     const body = document.body;
-    const themeToggleButton = document.getElementById('theme-toggle');
-    const sunMoonIcon = themeToggleButton.querySelector('.sun-moon-icon');
+    const sunMoonIcon = document.getElementById('theme-toggle').querySelector('.sun-moon-icon');
 
-    if (storedTheme === 'dark') {
-        body.classList.add('dark-mode');
+    if (body.classList.contains('light-mode')) {
         body.classList.remove('light-mode');
-        sunMoonIcon.textContent = '🌙'; // Moon icon for dark mode
+        body.classList.add('dark-mode');
+        sunMoonIcon.textContent = '☀️'; // Change to sun icon for dark mode
+        setCookie('theme', 'dark', 365); // Set cookie with a 365-day expiration
     } else {
-        body.classList.add('light-mode');
         body.classList.remove('dark-mode');
-        sunMoonIcon.textContent = '☀️'; // Sun icon for light mode
+        body.classList.add('light-mode');
+        sunMoonIcon.textContent = '🌙'; // Change to moon icon for light mode
+        setCookie('theme', 'light', 365); // Set cookie with a 365-day expiration
     }
 };
 
-// Apply the stored theme as soon as the script loads, before the page finishes loading
-applyStoredTheme();
+// Apply the user's stored theme on page load
+const applyStoredTheme = () => {
+    const storedTheme = getCookie('theme');
+    const body = document.body;
+    const sunMoonIcon = document.getElementById('theme-toggle').querySelector('.sun-moon-icon');
 
-// Event listener for the theme toggle button
+    if (storedTheme === 'dark') {
+        body.classList.add('dark-mode');
+        sunMoonIcon.textContent = '☀️'; // Sun icon for dark mode
+    } else if (storedTheme === 'light') {
+        body.classList.add('light-mode');
+        sunMoonIcon.textContent = '🌙'; // Moon icon for light mode
+    }
+};
+
+// Call applyStoredTheme on page load to persist the theme
+document.addEventListener('DOMContentLoaded', () => {
+    applyStoredTheme();
+});
+
+// Event listener for theme toggle button
 document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+
 
 // Run additional functions after the window has loaded
 window.onload = () => {

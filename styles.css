@@ -24,6 +24,42 @@ main {
     padding-bottom: 140px; /* Adjust this value based on the footer height */
 }
 
+/*Github Corner Settings*/
+.github-corner:hover .octo-arm {
+    animation: octocat-wave 560ms ease-in-out;
+}
+
+@keyframes octocat-wave {
+    0%, 100% { transform: rotate(0); }
+    20%, 60% { transform: rotate(-25deg); }
+    40%, 80% { transform: rotate(10deg); }
+}
+
+@media (max-width: 500px) {
+    .github-corner:hover .octo-arm { animation: none; }
+    .github-corner .octo-arm { animation: octocat-wave 560ms ease-in-out; }
+}
+
+/* Light mode (default) */
+.corner-fill {
+    fill: #1e1e2e; /* Black corner */
+}
+
+.github-icon {
+    color: #eff1f5; /* White octocat */
+}
+
+/* Dark mode */
+body.dark-mode .corner-fill {
+    fill: #eff1f5; /* White corner */
+}
+
+body.dark-mode .github-icon {
+    color: #1e1e2e; /* Black octocat */
+}
+
+
+/*NFT Items Styles*/
 .gallery {
     display: flex;
     flex-wrap: wrap;
