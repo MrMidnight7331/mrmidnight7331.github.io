@@ -161,8 +161,8 @@ const toggleFlip = (event) => {
     nftItem.classList.toggle('flip');
 };
 
-// Function to fetch and display NFTs from all wallet addresses and chains
-const displayNFTs = async () => {
+// Function to handle index.html page
+const handleIndexPage = async () => {
     const gallery = document.getElementById('nft-gallery');
     gallery.innerHTML = ''; // Clear previous content
 
@@ -186,5 +186,34 @@ const displayNFTs = async () => {
     }
 };
 
-// Load the NFTs when the page loads
-window.onload = displayNFTs;
+// Function to handle search.html page
+const handleSearchPage = async () => {
+    const gallery = document.getElementById('nft-gallery');
+    gallery.innerHTML = ''; // Clear previous content
+
+    const apiKey = (await fetchConfig()).apiKey; // Get API key from config
+
+    const searchButton = document.getElementById('search-button');
+    searchButton.addEventListener('click', async () => {
+        const addressInput = document.getElementById('address-input');
+        const walletAddress = addressInput.value.trim();
+        if (walletAddress) {
+            // Display Ethereum NFTs
+            await displayNFTsForChainAndWallet('ethereum', walletAddress, apiKey, gallery);
+
+            // Display Polygon NFTs
+            await displayNFTsForChainAndWallet('polygon', walletAddress, apiKey, gallery);
+        } else {
+            alert('Please enter a valid Ethereum address.');
+        }
+    });
+};
+
+// Determine which page is being loaded and call the appropriate function
+window.onload = () => {
+    if (document.getElementById('search-page')) {
+        handleSearchPage();
+    } else {
+        handleIndexPage();
+    }
+};
