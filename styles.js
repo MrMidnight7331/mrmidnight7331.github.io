@@ -37,7 +37,6 @@ document.querySelectorAll('.three-dots').forEach(button => {
 });
 
 // Function to handle footer visibility
-// Function to handle footer visibility
 const handleFooterVisibility = () => {
     const footer = document.querySelector('footer');
     if (!footer) {

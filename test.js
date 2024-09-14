@@ -36,5 +36,4 @@ const testFetchAndLogNFTs = async () => {
     }
 };
 
-// Run the test function when the file is executed
 testFetchAndLogNFTs();
