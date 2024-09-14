@@ -21,6 +21,20 @@ const addZoomEffect = () => {
         });
     });
 };
+const toggleFlip = (event) => {
+    event.stopPropagation(); // Prevent the event from bubbling up
+
+    const nftItem = event.currentTarget.closest('.nft-item');
+    
+    if (nftItem) {
+        nftItem.classList.toggle('flip'); // Toggle the flip class for animation
+    }
+};
+
+// Add event listeners to all relevant elements (e.g., buttons for flipping)
+document.querySelectorAll('.three-dots').forEach(button => {
+    button.addEventListener('click', toggleFlip);
+});
 
 // Function to handle footer visibility
 // Function to handle footer visibility

@@ -10,7 +10,7 @@ body {
 }
 
 header {
-    background-color: #313244; /* Surface0 */
+    background-color: #1e1e2e; /* Surface0 */
     color: #eff1f5; /* Text */
     text-align: center;
     padding: 1em 0;
@@ -79,19 +79,15 @@ body.dark-mode .github-icon {
     width: 100%; /* Ensures it doesn't exceed the container width */
     max-width: 400px; /* Limits the maximum width */
     height: 500px; /* Adjust based on your design */
-    background-color: #45475a;
+    background-color: #1e1e2e;
     border-radius: 16px;
     overflow: hidden; /* Prevents any content from overflowing */
     display: flex;
     flex-direction: column;
     align-items: center;
     box-sizing: border-box; /* Include padding in width and height calculations */
-}
-
-
-.nft-item:hover .nft-image {
-    transform: scale(1.1); /* Zoom in on hover */
-
+    perspective: 1000px; /* Adjust for the depth of the flip */
+    transition: transform 0.6s ease; /* Smooth transition for flip */
 }
 
 .nft-item.flip .nft-front {
@@ -106,7 +102,7 @@ body.dark-mode .github-icon {
     width: 100%;
     height: 100%;
     backface-visibility: hidden;
-    transition: transform 0.6s ease;
+    transition: transform 0.6s ease; /* Smooth transition for flip */
     position: absolute;
     top: 0;
     left: 0;
@@ -115,6 +111,7 @@ body.dark-mode .github-icon {
 .nft-front {
     z-index: 2;
 }
+
 
 
 .three-dots {
@@ -249,7 +246,7 @@ footer {
 /* Footer styles for light mode */
 body.light-mode footer {
     background-color: rgba(255, 255, 255, 0.3); /* Light transparent background for footer */
-    color: #000000; /* Text color for footer */
+    color: #1e1e2e; /* Text color for footer */
     box-shadow: 0 -4px 6px rgba(180, 190, 254, 0.8); /* Light shadow for footer */
 }
 
@@ -318,18 +315,17 @@ body.blur {
 
 .nft-back {
     z-index: 1;
-    transform: rotateY(180deg);
+    transform: rotateY(-180deg); /* Initial state for back */
     background-color: #cba6f7; /* Background color */
     padding: 20px;
     display: flex;
     flex-direction: column;
     justify-content: center; /* Center content vertically */
     align-items: center; /* Center content horizontally */
-    color: #333;
+    color: #1e1e2e;
     font-size: 1.2em; /* Responsive font size for back text */
     box-sizing: border-box;
     overflow: hidden; /* Prevent overflow */
-    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .back-title {
@@ -374,19 +370,19 @@ body.blur {
 /* Light Mode Styles */
 body.light-mode {
     background-color: #eff1f5; /* Base color for light mode */
-    color: #313244; /* Text color for light mode */
+    color: #1e1e2e; /* Text color for light mode */
 }
 
 .light-mode header {
     background-color: #eff1f5; /* Light background for header */
-    color: #313244; /* Text color for header */
+    color: #1e1e2e; /* Text color for header */
     box-shadow: 0 4px 6px rgba(180, 190, 254, 0.8); /* Light shadow for header */
     border-bottom: 2px solid #b4befe; /* Mauve for a subtle accent */
 }
 
 .light-mode .nft-item {
     background-color: #eff1f5; /* White background for NFT items */
-    color: #313244; /* Text color for NFT items */
+    color: #1e1e2e; /* Text color for NFT items */
     box-shadow: 0 8px 16px rgba(180, 190, 254, 0.8); /* Light shadow for NFT items */
 }
 
@@ -409,7 +405,7 @@ body.dark-mode {
 }
 
 .dark-mode .nft-item {
-    background-color: #45475a; /* Dark background for NFT items */
+    background-color: #1e1e2e; /* Dark background for NFT items */
     color: #cdd6f4; /* Text color for NFT items */
     box-shadow: 0 8px 16px rgba(203, 166, 247, 0.8); /* Light shadow for NFT items */
 }

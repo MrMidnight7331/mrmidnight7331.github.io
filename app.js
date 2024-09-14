@@ -155,11 +155,6 @@ const displayNFTsForChainAndWallet = async (chain, walletAddress, apiKey, galler
 };
 
 // Function to toggle the flip effect on the NFT card
-const toggleFlip = (event) => {
-    event.stopPropagation(); // Prevent the event from bubbling up
-    const nftItem = event.currentTarget.closest('.nft-item');
-    nftItem.classList.toggle('flip');
-};
 
 // Function to handle index.html page
 const handleIndexPage = async () => {
