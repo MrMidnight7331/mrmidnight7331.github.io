@@ -287,6 +287,12 @@ body.blur {
     transition: transform 0.3s ease;
 }
 
+.nft-item:hover .nft-image {
+    transform: scale(1.2); /* Zoom in on hover */
+
+}
+
+
 .nft-item.zoomed .nft-image {
     position: absolute;
     top: 50%;
