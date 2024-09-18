@@ -38,10 +38,13 @@ const isFiltered = (title, description, filters) => {
 };
 
 // Fetch NFTs from Alchemy API for a given chain with retry logic
+// Fetch NFTs from Alchemy API for a given chain with retry logic
 const fetchNFTs = async (chain, walletAddress, apiKey, retries = 3) => {
     const apiUrl = chain === 'ethereum'
         ? `https://eth-mainnet.g.alchemy.com/v2/${apiKey}/getNFTsForOwner?owner=${walletAddress}&withMetadata=true`
-        : `https://polygon-mainnet.g.alchemy.com/v2/${apiKey}/getNFTsForOwner?owner=${walletAddress}&withMetadata=true`;
+        : chain === 'polygon'
+        ? `https://polygon-mainnet.g.alchemy.com/v2/${apiKey}/getNFTsForOwner?owner=${walletAddress}&withMetadata=true`
+        : `https://base-mainnet.g.alchemy.com/v2/${apiKey}/getNFTsForOwner?owner=${walletAddress}&withMetadata=true`;
 
     try {
         const response = await fetch(apiUrl);
@@ -76,19 +79,23 @@ const fetchNFTs = async (chain, walletAddress, apiKey, retries = 3) => {
     }
 };
 
+
 // Function to shorten the address
 const shortenAddress = (address) => {
     return address.slice(0, 6) + '...' + address.slice(-4);
 };
 
 // Function to get explorer URL (Etherscan/Polygonscan)
+// Function to get explorer URL (Etherscan/Polygonscan/Base explorer)
 const getExplorerUrl = (chain, address) => {
     const baseUrls = {
         ethereum: 'https://etherscan.io/address/',
-        polygon: 'https://polygonscan.com/address/'
+        polygon: 'https://polygonscan.com/address/',
+        base: 'https://basescan.org/address/'  // Base explorer
     };
     return baseUrls[chain] + address;
 };
+
 
 // Function to display NFTs for a single wallet
 const displayNFTsForChainAndWallet = async (chain, walletAddress, apiKey, gallery) => {
@@ -178,8 +185,12 @@ const handleIndexPage = async () => {
 
         // Display Polygon NFTs
         await displayNFTsForChainAndWallet('polygon', walletAddress, apiKey, gallery);
+
+        // Display Base NFTs
+        await displayNFTsForChainAndWallet('base', walletAddress, apiKey, gallery);  // Added Base support
     }
 };
+
 
 // Function to handle search.html page
 const handleSearchPage = async () => {
