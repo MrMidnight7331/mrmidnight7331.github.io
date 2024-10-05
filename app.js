@@ -7,9 +7,10 @@ const fetchConfig = async () => {
         return config;
     } catch (error) {
         console.error('Error loading configuration:', error);
-        return { username: 'DefaultUser', walletAddresses: [], apiKey: '' };
+        return { username: 'DefaultUser', walletAddresses: [], apiKey: '', roninKey: '' };
     }
 };
+
 
 // Convert IPFS URL to HTTP URL
 const convertIPFSUrl = (ipfsUrl) => {
@@ -78,6 +79,86 @@ const fetchNFTs = async (chain, walletAddress, apiKey, retries = 3) => {
         return [];
     }
 };
+// Function to dynamically extract attributes for Ronin NFTs (Sidekicks, Pets, etc.), excluding links and assets
+const getRoninAttributes = (metadata) => {
+    const attributes = [];
+
+    // Check if the metadata has properties
+    if (metadata.properties) {
+        // Loop through each property dynamically and add to attributes array
+        for (const [key, value] of Object.entries(metadata.properties)) {
+            if (typeof value === 'object' && value !== null) {
+                // If the value is an object (like assets in Sidekicks), loop through inner properties
+                for (const [innerKey, innerValue] of Object.entries(value)) {
+                    // Exclude URLs from attributes
+                    if (typeof innerValue === 'string' && !innerValue.startsWith('http')) {
+                        attributes.push(`${key.charAt(0).toUpperCase() + key.slice(1)} ${innerKey}: ${innerValue}`);
+                    }
+                }
+            } else {
+                // Exclude URLs from attributes
+                if (typeof value === 'string' && !value.startsWith('http')) {
+                    attributes.push(`${key.charAt(0).toUpperCase() + key.slice(1)}: ${value}`);
+                }
+            }
+        }
+    }
+
+    // Check if the metadata has a more traditional attributes array (for example, Pets)
+    if (metadata.attributes) {
+        metadata.attributes.forEach(attr => {
+            attributes.push(`${attr.trait_type}: ${attr.value}`);
+        });
+    }
+
+    return attributes.length > 0 ? attributes.join('<br>') : 'No attributes available';
+};
+
+
+// Fetch NFTs from Ronin API with retry logic
+const fetchRoninNFTs = async (walletAddress, apiKey, retries = 3) => {
+    const apiUrl = `https://api-gateway.skymavis.com/skynet/ronin/web3/v2/accounts/${walletAddress}/nfts?limit=2`;
+
+    try {
+        const response = await fetch(apiUrl, {
+            headers: {
+                'Accept': 'application/json',
+                'X-API-KEY': apiKey
+            }
+        });
+
+        const textResponse = await response.text(); // Get raw text response for debugging
+
+        // Check if response status is 429 (Rate Limit Exceeded)
+        if (response.status === 429) {
+            if (retries > 0) {
+                console.warn(`Ronin rate limit exceeded. Retrying ${retries} more times...`);
+                await new Promise(resolve => setTimeout(resolve, 5000)); // 5 seconds delay
+                return fetchRoninNFTs(walletAddress, apiKey, retries - 1);
+            } else {
+                throw new Error('Ronin rate limit exceeded. No retries left.');
+            }
+        }
+
+        const data = JSON.parse(textResponse);
+
+        // Log the entire response for debugging
+        console.log('Ronin API Response:', data);
+
+        // Check if the expected result field exists and contains items
+        if (!data || !data.result || !data.result.items) {
+            console.error('Invalid Ronin API response structure:', data);
+            return [];  // Return an empty array if the structure is unexpected
+        }
+
+        console.log('Fetched Ronin NFTs:', data.result.items);
+        return data.result.items || [];
+    } catch (error) {
+        console.error('Error fetching Ronin NFTs:', error);
+        return [];
+    }
+};
+
 
 
 // Function to shorten the address
@@ -85,7 +166,6 @@ const shortenAddress = (address) => {
     return address.slice(0, 6) + '...' + address.slice(-4);
 };
 
-// Function to get explorer URL (Etherscan/Polygonscan)
 // Function to get explorer URL (Etherscan/Polygonscan/Base explorer)
 const getExplorerUrl = (chain, address) => {
     const baseUrls = {
@@ -99,7 +179,14 @@ const getExplorerUrl = (chain, address) => {
 
 // Function to display NFTs for a single wallet
 const displayNFTsForChainAndWallet = async (chain, walletAddress, apiKey, gallery) => {
-    const nfts = await fetchNFTs(chain, walletAddress, apiKey);
+    let nfts = [];
+
+    if (chain === 'ronin') {
+        nfts = await fetchRoninNFTs(walletAddress, apiKey);
+    } else {
+        nfts = await fetchNFTs(chain, walletAddress, apiKey);
+    }
+
     const filters = await loadFilters();
 
     // Filter out spam NFTs
@@ -108,20 +195,30 @@ const displayNFTsForChainAndWallet = async (chain, walletAddress, apiKey, galler
     // Display each NFT
     filteredNFTs.forEach(nft => {
         const metadata = nft.metadata || {};
-        const contractAddress = nft.contract.address || '';
-        const imageUrl = convertIPFSUrl(metadata.image || '');
+        const contractAddress = nft.contractAddress || nft.contract?.address || '';  // Handle Ronin and other chains
+        const imageUrl = chain === 'ronin' ? metadata.image : convertIPFSUrl(metadata.image || '');
         const name = metadata.name || 'Unknown';
         const description = metadata.description || 'No description';
         const shortenedContractAddress = shortenAddress(contractAddress);
-        const explorerUrl = getExplorerUrl(chain, contractAddress);
+        const explorerUrl = chain === 'ronin' ? '#' : getExplorerUrl(chain, contractAddress);
 
-        // Extract additional data for the backside
-        const floorPrice = nft.contractMetadata?.openSea?.floorPrice ? `${nft.contractMetadata.openSea.floorPrice} ETH` : 'Not available';
-        const totalSupply = nft.contractMetadata?.totalSupply || 'Unknown';
-        const tokenType = nft.id.tokenMetadata?.tokenType || 'Unknown';
-        const attributes = metadata.attributes
+        // Extract attributes dynamically for Ronin
+        const attributes = chain === 'ronin' ? getRoninAttributes(metadata) : metadata.attributes
             ? metadata.attributes.map(attr => `${attr.trait_type}: ${attr.value}`).join('<br>')
             : 'No attributes available';
+
+        // Add additional details: Floor Price, Total Supply, and Token Type only if available
+        const floorPrice = nft.contractMetadata?.openSea?.floorPrice && nft.contractMetadata.openSea.floorPrice !== 'Not available'
+            ? `<p><strong>Floor Price:</strong> ${nft.contractMetadata.openSea.floorPrice} ETH</p>`
+            : '';
+
+        const totalSupply = nft.contractMetadata?.totalSupply && nft.contractMetadata.totalSupply !== 'Unknown'
+            ? `<p><strong>Total Supply:</strong> ${nft.contractMetadata.totalSupply}</p>`
+            : '';
+
+        const tokenType = nft.id?.tokenMetadata?.tokenType && nft.id.tokenMetadata.tokenType !== 'Unknown'
+            ? `<p><strong>Token Type:</strong> ${nft.id.tokenMetadata.tokenType}</p>`
+            : '';
 
         const nftElement = document.createElement('div');
         nftElement.className = 'nft-item';
@@ -146,9 +243,9 @@ const displayNFTsForChainAndWallet = async (chain, walletAddress, apiKey, galler
             </div>
             <div class="nft-back">
                 <div class="back-content">
-                    <p><strong>Floor Price:</strong> ${floorPrice}</p>
-                    <p><strong>Total Supply:</strong> ${totalSupply}</p>
-                    <p><strong>Token Type:</strong> ${tokenType}</p>
+                    ${floorPrice}
+                    ${totalSupply}
+                    ${tokenType}
                     <p><strong>Attributes:</strong><br>${attributes}</p>
                 </div>
                 <div class="three-dots" onclick="toggleFlip(event)">
@@ -161,7 +258,7 @@ const displayNFTsForChainAndWallet = async (chain, walletAddress, apiKey, galler
     });
 };
 
-// Function to toggle the flip effect on the NFT card
+
 
 // Function to handle index.html page
 const handleIndexPage = async () => {
@@ -173,6 +270,7 @@ const handleIndexPage = async () => {
     const walletAddresses = config.walletAddresses;
     const username = config.username;
     const apiKey = config.apiKey;
+    const roninKey = config.roninKey;
 
     // Update the page with the username
     document.getElementById('header-title').textContent = `${username}'s NFT Gallery`;
@@ -187,9 +285,13 @@ const handleIndexPage = async () => {
         await displayNFTsForChainAndWallet('polygon', walletAddress, apiKey, gallery);
 
         // Display Base NFTs
-        await displayNFTsForChainAndWallet('base', walletAddress, apiKey, gallery);  // Added Base support
+        await displayNFTsForChainAndWallet('base', walletAddress, apiKey, gallery);
+
+        // Display Ronin NFTs
+        await displayNFTsForChainAndWallet('ronin', walletAddress, roninKey, gallery);
     }
 };
+
 
 
 // Function to handle search.html page
